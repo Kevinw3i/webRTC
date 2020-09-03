@@ -11,7 +11,7 @@
     <input type="file" accept="audio/*;capture=microphone">  -->
     <!-- <video autoplay></video> -->
     <video id="player" controls autoplay></video>
-    <button id="stop">開始</button>
+    <button id="status">開始</button>
     <button id="capture">截圖</button>
     <canvas id="snapshot" width=320 height=240></canvas>
 </body>
@@ -36,7 +36,7 @@
             var player = document.getElementById('player'); 
             var snapshotCanvas = document.getElementById('snapshot');
             var captureButton = document.getElementById('capture');
-            var stopButton = document.getElementById('stop');
+            var statusButton = document.getElementById('status');
             var videoTracks;
 
             var handleSuccess = function(stream) {
@@ -52,14 +52,14 @@
             });
 
             // add stop Event 
-            stopButton.addEventListener('click', () =>{
-                if( stopButton.textContent == "停止"){
-                    stopButton.textContent = "開始";
+            statusButton.addEventListener('click', () =>{
+                if( statusButton.textContent == "停止"){
+                    statusButton.textContent = "開始";
                     // Stop all video streams.
                     videoTracks.forEach(function(track) {track.stop()});
                 }
                 else{
-                    stopButton.textContent = "停止";
+                    statusButton.textContent = "停止";
                     navigator.mediaDevices.getUserMedia({video: true, audio: false})
                         .then(handleSuccess);
                 }
