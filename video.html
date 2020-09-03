@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <input type="file" accept="image/*;capture=camera"> -->
+    <!-- <input type="file" accept="video/*;capture=camcorder">
+    <input type="file" accept="audio/*;capture=microphone">  -->
+    <!-- <video autoplay></video> -->
+    <video id="player" controls autoplay></video>
+    <button id="stop">停止</button>
+    <button id="capture">截圖</button>
+    <canvas id="snapshot" width=320 height=240></canvas>
+</body>
+<script>
+    function hasGetUserMedia() {
+        // Note: Opera builds are unprefixed.
+        return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+                navigator.mozGetUserMedia || navigator.msGetUserMedia);
+        }
+
+        // https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia
+        // https://codertw.com/%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC/29886/
+        if (hasGetUserMedia()) {
+            console.log('got it!');
+            
+            // media start
+            var player = document.getElementById('player'); 
+            var snapshotCanvas = document.getElementById('snapshot');
+            var captureButton = document.getElementById('capture');
+            var stopButton = document.getElementById('stop');
+            var videoTracks;
+
+            var handleSuccess = function(stream) {
+                player.srcObject = stream;
+                videoTracks = stream.getVideoTracks();
+            };
+
+            captureButton.addEventListener('click', function() {
+                var context = snapshot.getContext('2d');
+                
+                context.drawImage(player, 0, 0, snapshotCanvas.width, 
+                    snapshotCanvas.height);                
+            });
+
+            // add stop Event 
+            stopButton.addEventListener('click', () =>{
+                // Stop all video streams.
+                videoTracks.forEach(function(track) {track.stop()});
+                if( stopButton.textContent == "停止"){
+                    stopButton.textContent = "開始";
+                }
+                else{
+                    stopButton.textContent = "停止";
+                    navigator.mediaDevices.getUserMedia({video: true})
+                        .then(handleSuccess);
+                }
+            })
+
+            navigator.mediaDevices.getUserMedia({video: true})
+                .then(handleSuccess);
+        } else {
+            alert('getUserMedia() is not supported in your browser');
+    }
+</script>
+</html>
