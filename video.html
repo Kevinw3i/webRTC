@@ -11,7 +11,7 @@
     <input type="file" accept="audio/*;capture=microphone">  -->
     <!-- <video autoplay></video> -->
     <video id="player" controls autoplay></video>
-    <button id="stop">停止</button>
+    <button id="stop">開始</button>
     <button id="capture">截圖</button>
     <canvas id="snapshot" width=320 height=240></canvas>
 </body>
@@ -22,8 +22,13 @@
                 navigator.mozGetUserMedia || navigator.msGetUserMedia);
         }
 
+        // https://github.com/Kevinw3i/webRTC
         // https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia
         // https://codertw.com/%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC/29886/
+        // https://www.rtcmulticonnection.org/docs/openSignalingChannel/
+        
+        // Firebase RTC
+        // https://webrtc.org/getting-started/firebase-rtc-codelab
         if (hasGetUserMedia()) {
             console.log('got it!');
             
@@ -48,20 +53,17 @@
 
             // add stop Event 
             stopButton.addEventListener('click', () =>{
-                // Stop all video streams.
-                videoTracks.forEach(function(track) {track.stop()});
                 if( stopButton.textContent == "停止"){
                     stopButton.textContent = "開始";
+                    // Stop all video streams.
+                    videoTracks.forEach(function(track) {track.stop()});
                 }
                 else{
                     stopButton.textContent = "停止";
-                    navigator.mediaDevices.getUserMedia({video: true})
+                    navigator.mediaDevices.getUserMedia({video: true, audio: false})
                         .then(handleSuccess);
                 }
             })
-
-            navigator.mediaDevices.getUserMedia({video: true})
-                .then(handleSuccess);
         } else {
             alert('getUserMedia() is not supported in your browser');
     }
